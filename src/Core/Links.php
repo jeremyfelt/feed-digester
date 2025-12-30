@@ -218,4 +218,15 @@ class Links {
 	public static function update_feed_meta( int $link_id, string $meta_key, $meta_value ): bool {
 		return (bool) update_metadata( 'link', $link_id, $meta_key, $meta_value );
 	}
+
+	/**
+	 * Get a feed by its link ID.
+	 *
+	 * @param int $link_id The link ID.
+	 * @return object|null The link object or null if not found.
+	 */
+	public static function get_feed_by_id( int $link_id ): ?object {
+		$link = get_bookmark( $link_id );
+		return $link ?: null;
+	}
 }
