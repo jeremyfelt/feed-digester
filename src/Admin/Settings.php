@@ -542,9 +542,12 @@ class Settings {
 	 * @return array The sanitized array.
 	 */
 	public static function sanitize_gemini_settings( array $input ): array {
-		$sanitized = array();
+		$sanitized        = array();
+		$existing_settings = get_option( 'afd_gemini_settings', array() );
 
-		$sanitized['api_key']     = sanitize_text_field( $input['api_key'] ?? '' );
+		// Preserve existing API key if no new value is submitted (password fields don't retain values).
+		$new_api_key              = sanitize_text_field( $input['api_key'] ?? '' );
+		$sanitized['api_key']     = ! empty( $new_api_key ) ? $new_api_key : ( $existing_settings['api_key'] ?? '' );
 		$sanitized['model']       = sanitize_text_field( $input['model'] ?? 'gemini-1.5-flash' );
 		$sanitized['temperature'] = min( 1.0, max( 0.0, floatval( $input['temperature'] ?? 0.7 ) ) );
 		$sanitized['max_tokens']  = min( 8192, max( 256, absint( $input['max_tokens'] ?? 8192 ) ) );
