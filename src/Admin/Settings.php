@@ -23,6 +23,7 @@ class Settings {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu_pages' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'display_notices' ) );
+		add_action( 'wp_ajax_afd_test_api', array( __CLASS__, 'ajax_test_api' ) );
 	}
 
 	/**
@@ -618,5 +619,32 @@ class Settings {
 			</div>
 			<?php
 		}
+	}
+
+	/**
+	 * Handle AJAX request to test API connection.
+	 *
+	 * @return void
+	 */
+	public static function ajax_test_api(): void {
+		check_ajax_referer( 'afd_test_api', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'ai-feed-digest' ) ) );
+		}
+
+		$client = new GeminiClient();
+
+		if ( ! $client->is_configured() ) {
+			wp_send_json_error( array( 'message' => __( 'API key not configured.', 'ai-feed-digest' ) ) );
+		}
+
+		$result = $client->test_connection();
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Connection successful!', 'ai-feed-digest' ) ) );
 	}
 }
