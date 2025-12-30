@@ -59,7 +59,7 @@ class Settings {
 	public static function register_settings(): void {
 		// Gemini settings.
 		register_setting(
-			'afd_gemini_settings',
+			'afd_settings',
 			'afd_gemini_settings',
 			array(
 				'type'              => 'array',
@@ -114,7 +114,7 @@ class Settings {
 
 		// Email settings.
 		register_setting(
-			'afd_email_settings',
+			'afd_settings',
 			'afd_email_settings',
 			array(
 				'type'              => 'array',
@@ -169,7 +169,7 @@ class Settings {
 
 		// General settings.
 		register_setting(
-			'afd_general_settings',
+			'afd_settings',
 			'afd_general_settings',
 			array(
 				'type'              => 'array',

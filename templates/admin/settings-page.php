@@ -16,9 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<form method="post" action="options.php">
 		<?php
-		settings_fields( 'afd_gemini_settings' );
-		settings_fields( 'afd_email_settings' );
-		settings_fields( 'afd_general_settings' );
+		settings_fields( 'afd_settings' );
 		?>
 
 		<div class="afd-settings-sections">
