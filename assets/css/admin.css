@@ -1,0 +1,403 @@
+/**
+ * AI Feed Digest Admin Styles
+ *
+ * @package AIFeedDigest
+ */
+
+/* General Admin Styles */
+.afd-settings-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 30px;
+	max-width: 1200px;
+}
+
+.afd-settings-sections {
+	flex: 1;
+	min-width: 600px;
+}
+
+.afd-settings-section {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.afd-settings-section h2 {
+	margin-top: 0;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.afd-settings-sidebar {
+	width: 280px;
+	flex-shrink: 0;
+}
+
+.afd-sidebar-section {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 15px;
+	margin-bottom: 20px;
+}
+
+.afd-sidebar-section h3 {
+	margin-top: 0;
+	font-size: 14px;
+}
+
+.afd-sidebar-section ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.afd-sidebar-section li {
+	margin-bottom: 8px;
+}
+
+/* Range Input Display */
+.afd-range-value {
+	display: inline-block;
+	min-width: 30px;
+	margin-left: 10px;
+	font-weight: 600;
+}
+
+/* Status Indicators */
+.afd-status {
+	display: inline-block;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.afd-status-active,
+.afd-feed-status .afd-status-active {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.afd-status-inactive,
+.afd-feed-status .afd-status-inactive {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.afd-status-sent {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.afd-status-pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.afd-due {
+	color: #0073aa;
+	font-weight: 500;
+}
+
+.afd-never,
+.afd-na {
+	color: #999;
+}
+
+/* Link Columns */
+.afd-items-undigested {
+	color: #666;
+	font-size: 12px;
+}
+
+/* Prompt Editor */
+.afd-prompt-editor-wrap {
+	max-width: 1400px;
+}
+
+.afd-prompt-editor-layout {
+	display: flex;
+	gap: 30px;
+	margin-top: 20px;
+}
+
+.afd-prompt-editor-main {
+	flex: 1;
+	min-width: 0;
+}
+
+.afd-prompt-editor-sidebar {
+	width: 300px;
+	flex-shrink: 0;
+}
+
+.afd-prompt-editor-container textarea {
+	width: 100%;
+	font-family: Consolas, Monaco, monospace;
+	font-size: 13px;
+	line-height: 1.5;
+	padding: 15px;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	resize: vertical;
+}
+
+.afd-prompt-actions {
+	margin-top: 15px;
+	display: flex;
+	gap: 10px;
+}
+
+.afd-variable-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.afd-variable-list li {
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #eee;
+}
+
+.afd-variable-list li:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.afd-insert-variable {
+	display: block;
+	background: #f0f0f1;
+	border: 1px solid #ccd0d4;
+	border-radius: 3px;
+	padding: 5px 10px;
+	cursor: pointer;
+	margin-bottom: 5px;
+	width: 100%;
+	text-align: left;
+}
+
+.afd-insert-variable:hover {
+	background: #e5e5e5;
+}
+
+.afd-insert-variable code {
+	background: transparent;
+	padding: 0;
+}
+
+.afd-tips-list {
+	margin: 0;
+	padding-left: 20px;
+}
+
+.afd-tips-list li {
+	margin-bottom: 10px;
+	color: #666;
+}
+
+/* Prompt Test Section */
+.afd-prompt-test {
+	margin-top: 40px;
+	padding-top: 30px;
+	border-top: 1px solid #ccd0d4;
+}
+
+.afd-test-controls {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.afd-test-feed-select {
+	min-width: 250px;
+}
+
+.afd-test-result {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+}
+
+.afd-test-content {
+	max-height: 500px;
+	overflow-y: auto;
+}
+
+/* Link Meta Box */
+.afd-link-meta-box .form-table th {
+	width: 150px;
+}
+
+.afd-meta-box-tip {
+	background: #f0f0f1;
+	padding: 10px 15px;
+	border-radius: 4px;
+	margin-top: 20px;
+}
+
+/* Digest Preview */
+.afd-digest-preview-wrap {
+	max-width: 1400px;
+}
+
+.afd-digest-preview-layout {
+	display: flex;
+	gap: 30px;
+	margin-top: 20px;
+}
+
+.afd-digest-list {
+	width: 400px;
+	flex-shrink: 0;
+}
+
+.afd-digest-list table {
+	background: #fff;
+}
+
+.afd-digest-list tr.afd-selected {
+	background-color: #e5f5fa;
+}
+
+.afd-digest-detail {
+	flex: 1;
+	min-width: 0;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+}
+
+.afd-digest-detail.afd-no-selection {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 300px;
+	color: #666;
+}
+
+.afd-digest-header {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.afd-digest-header h2 {
+	margin: 0 0 10px;
+}
+
+.afd-digest-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	color: #666;
+	font-size: 13px;
+}
+
+.afd-digest-actions {
+	margin-bottom: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+.afd-email-preview {
+	background: #f8f9fa;
+	border: 1px solid #e9ecef;
+	border-radius: 4px;
+	padding: 20px;
+	max-height: 600px;
+	overflow-y: auto;
+}
+
+.afd-no-digests {
+	padding: 40px;
+	text-align: center;
+	background: #f8f9fa;
+	border-radius: 4px;
+	color: #666;
+}
+
+/* Feed Status Box */
+.afd-feed-status p {
+	margin: 0 0 10px;
+}
+
+.afd-feed-status p:last-child {
+	margin-bottom: 0;
+}
+
+/* Loading States */
+.afd-loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.afd-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #ccc;
+	border-top-color: #0073aa;
+	border-radius: 50%;
+	animation: afd-spin 0.8s linear infinite;
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+@keyframes afd-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Test API Button */
+.afd-test-result {
+	margin-left: 10px;
+	font-weight: 500;
+}
+
+.afd-test-result.success {
+	color: #155724;
+}
+
+.afd-test-result.error {
+	color: #721c24;
+}
+
+/* Responsive */
+@media screen and (max-width: 1200px) {
+	.afd-settings-wrap {
+		flex-direction: column;
+	}
+
+	.afd-settings-sections {
+		min-width: 100%;
+	}
+
+	.afd-settings-sidebar {
+		width: 100%;
+	}
+
+	.afd-prompt-editor-layout {
+		flex-direction: column;
+	}
+
+	.afd-prompt-editor-sidebar {
+		width: 100%;
+	}
+
+	.afd-digest-preview-layout {
+		flex-direction: column;
+	}
+
+	.afd-digest-list {
+		width: 100%;
+	}
+}

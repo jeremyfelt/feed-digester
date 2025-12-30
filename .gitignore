@@ -1,0 +1,57 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.buildpath
+.settings/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Build artifacts
+/build/
+/dist/
+
+# Test coverage
+/coverage/
+.phpunit.result.cache
+
+# Composer
+composer.lock
+
+# PHPUnit
+phpunit.xml
+.phpunit.cache/
+
+# PHPStan
+phpstan.neon
+
+# Logs
+*.log
+debug.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# WordPress specific
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
