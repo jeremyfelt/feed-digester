@@ -212,9 +212,11 @@ class GeminiClient {
 	 */
 	public static function get_available_models(): array {
 		return array(
-			'gemini-1.5-flash'   => __( 'Gemini 1.5 Flash (Fast, efficient)', 'ai-feed-digest' ),
-			'gemini-1.5-pro'     => __( 'Gemini 1.5 Pro (More capable)', 'ai-feed-digest' ),
-			'gemini-2.0-flash'   => __( 'Gemini 2.0 Flash (Latest)', 'ai-feed-digest' ),
+			'gemini-1.5-flash'       => __( 'Gemini 1.5 Flash (Fast, efficient)', 'ai-feed-digest' ),
+			'gemini-1.5-pro'         => __( 'Gemini 1.5 Pro (More capable)', 'ai-feed-digest' ),
+			'gemini-2.0-flash'       => __( 'Gemini 2.0 Flash', 'ai-feed-digest' ),
+			'gemini-3-flash-preview' => __( 'Gemini 3 Flash (Latest, fastest)', 'ai-feed-digest' ),
+			'gemini-3-pro-preview'   => __( 'Gemini 3 Pro (Most intelligent)', 'ai-feed-digest' ),
 		);
 	}
 }

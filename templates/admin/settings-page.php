@@ -79,8 +79,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$digest_next = wp_next_scheduled( 'afd_generate_digests' );
 			?>
 			<p>
-				<strong><?php esc_html_e( 'Next feed fetch:', 'ai-feed-digest' ); ?></strong><br />
+				<strong><?php esc_html_e( 'Next feed scheduling:', 'ai-feed-digest' ); ?></strong><br />
 				<?php echo $fetch_next ? esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $fetch_next ) ) : esc_html__( 'Not scheduled', 'ai-feed-digest' ); ?>
+				<br />
+				<span class="description"><?php esc_html_e( 'Feeds are fetched at random times throughout the day.', 'ai-feed-digest' ); ?></span>
 			</p>
 			<p>
 				<strong><?php esc_html_e( 'Next digest check:', 'ai-feed-digest' ); ?></strong><br />

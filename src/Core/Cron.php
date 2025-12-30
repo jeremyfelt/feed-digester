@@ -38,6 +38,13 @@ class Cron {
 	public const CLEANUP_HOOK = 'afd_cleanup_old_items';
 
 	/**
+	 * Hook name for fetching a single feed.
+	 *
+	 * @var string
+	 */
+	public const FETCH_SINGLE_HOOK = 'afd_fetch_single_feed';
+
+	/**
 	 * Schedule cron events.
 	 *
 	 * @return void
@@ -66,6 +73,12 @@ class Cron {
 		wp_clear_scheduled_hook( self::FETCH_HOOK );
 		wp_clear_scheduled_hook( self::DIGEST_HOOK );
 		wp_clear_scheduled_hook( self::CLEANUP_HOOK );
+
+		// Clear all scheduled single feed fetches.
+		$feeds = Links::get_active_feeds();
+		foreach ( $feeds as $feed ) {
+			wp_clear_scheduled_hook( self::FETCH_SINGLE_HOOK, array( $feed->link_id ) );
+		}
 	}
 
 	/**
@@ -74,33 +87,90 @@ class Cron {
 	 * @return void
 	 */
 	public static function register_hooks(): void {
-		add_action( self::FETCH_HOOK, array( __CLASS__, 'fetch_all_feeds' ) );
+		add_action( self::FETCH_HOOK, array( __CLASS__, 'schedule_feed_fetches' ) );
+		add_action( self::FETCH_SINGLE_HOOK, array( __CLASS__, 'fetch_single_feed' ), 10, 1 );
 		add_action( self::DIGEST_HOOK, array( __CLASS__, 'process_digests' ) );
 		add_action( self::CLEANUP_HOOK, array( __CLASS__, 'cleanup_old_items' ) );
 	}
 
 	/**
-	 * Fetch all active feeds.
+	 * Schedule individual feed fetches at random times throughout the day.
+	 *
+	 * Instead of fetching all feeds at once, this schedules each feed
+	 * to be fetched at a random time within the next 24 hours.
 	 *
 	 * @return void
 	 */
-	public static function fetch_all_feeds(): void {
+	public static function schedule_feed_fetches(): void {
 		$feeds = Links::get_active_feeds();
 
 		foreach ( $feeds as $feed ) {
-			$fetcher = new Feed\Fetcher();
-			$result  = $fetcher->fetch( $feed );
-
-			if ( is_wp_error( $result ) ) {
-				self::log_error(
-					sprintf(
-						/* translators: 1: feed name, 2: error message */
-						__( 'Failed to fetch feed "%1$s": %2$s', 'ai-feed-digest' ),
-						$feed->link_name,
-						$result->get_error_message()
-					)
-				);
+			// Skip if this feed already has a pending fetch scheduled.
+			$scheduled = wp_next_scheduled( self::FETCH_SINGLE_HOOK, array( $feed->link_id ) );
+			if ( $scheduled ) {
+				continue;
 			}
+
+			// Schedule fetch at a random time within the next 24 hours.
+			// Use feed ID as seed for consistent-ish timing per feed.
+			$random_offset = self::get_random_offset_for_feed( $feed->link_id );
+			$scheduled_time = time() + $random_offset;
+
+			wp_schedule_single_event( $scheduled_time, self::FETCH_SINGLE_HOOK, array( $feed->link_id ) );
+		}
+	}
+
+	/**
+	 * Get a random time offset for a feed (0 to 24 hours in seconds).
+	 *
+	 * Uses the feed ID as a seed combined with the current date to provide
+	 * consistent timing for each feed on a given day while varying day-to-day.
+	 *
+	 * @param int $feed_id The feed link ID.
+	 * @return int Random offset in seconds (0 to DAY_IN_SECONDS).
+	 */
+	private static function get_random_offset_for_feed( int $feed_id ): int {
+		// Combine feed ID with current date for a seed that varies daily.
+		$seed = $feed_id + intval( gmdate( 'Ymd' ) );
+		mt_srand( $seed );
+		$offset = mt_rand( 0, DAY_IN_SECONDS );
+		mt_srand(); // Reset the random seed.
+
+		return $offset;
+	}
+
+	/**
+	 * Fetch a single feed by its link ID.
+	 *
+	 * @param int $link_id The feed link ID.
+	 * @return void
+	 */
+	public static function fetch_single_feed( int $link_id ): void {
+		$feed = Links::get_feed_by_id( $link_id );
+
+		if ( ! $feed ) {
+			self::log_error(
+				sprintf(
+					/* translators: %d: feed link ID */
+					__( 'Feed with ID %d not found for scheduled fetch.', 'ai-feed-digest' ),
+					$link_id
+				)
+			);
+			return;
+		}
+
+		$fetcher = new Feed\Fetcher();
+		$result  = $fetcher->fetch( $feed );
+
+		if ( is_wp_error( $result ) ) {
+			self::log_error(
+				sprintf(
+					/* translators: 1: feed name, 2: error message */
+					__( 'Failed to fetch feed "%1$s": %2$s', 'ai-feed-digest' ),
+					$feed->link_name,
+					$result->get_error_message()
+				)
+			);
 		}
 	}
 
