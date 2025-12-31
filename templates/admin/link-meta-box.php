@@ -12,11 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use AIFeedDigest\Admin\LinkMetaBox;
 use AIFeedDigest\Core\Links;
+use AIFeedDigest\Core\Plugin;
 
-$frequency         = LinkMetaBox::get_frequency( $link_id );
+$frequency          = LinkMetaBox::get_frequency( $link_id );
 $fetch_full_content = LinkMetaBox::get_fetch_full_content( $link_id );
-$is_active         = LinkMetaBox::get_is_active( $link_id );
-$custom_prompt     = Links::get_feed_meta( $link_id, '_afd_custom_prompt' );
+$is_active          = LinkMetaBox::get_is_active( $link_id );
+$feed_type          = LinkMetaBox::get_feed_type( $link_id );
+$custom_prompt      = Links::get_feed_meta( $link_id, '_afd_custom_prompt' );
+$feed_types         = Plugin::get_feed_types();
 ?>
 
 <div class="afd-link-meta-box">
@@ -52,6 +55,24 @@ $custom_prompt     = Links::get_feed_meta( $link_id, '_afd_custom_prompt' );
 				</select>
 				<p class="description">
 					<?php esc_html_e( 'How often to generate a digest for this feed.', 'ai-feed-digest' ); ?>
+				</p>
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row">
+				<label for="afd_feed_type"><?php esc_html_e( 'Feed Type', 'ai-feed-digest' ); ?></label>
+			</th>
+			<td>
+				<select id="afd_feed_type" name="afd_feed_type">
+					<?php foreach ( $feed_types as $type_value => $type_label ) : ?>
+						<option value="<?php echo esc_attr( $type_value ); ?>" <?php selected( $feed_type, $type_value ); ?>>
+							<?php echo esc_html( $type_label ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Choose how this feed should be summarized. Each type uses a different prompt optimized for its content.', 'ai-feed-digest' ); ?>
 				</p>
 			</td>
 		</tr>

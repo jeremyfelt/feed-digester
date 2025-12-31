@@ -154,6 +154,13 @@ class LinkMetaBox {
 		// Save custom prompt.
 		$custom_prompt = isset( $_POST['afd_custom_prompt'] ) ? sanitize_textarea_field( wp_unslash( $_POST['afd_custom_prompt'] ) ) : '';
 		Links::update_feed_meta( $link_id, '_afd_custom_prompt', $custom_prompt );
+
+		// Save feed type.
+		$feed_type = isset( $_POST['afd_feed_type'] ) ? sanitize_text_field( wp_unslash( $_POST['afd_feed_type'] ) ) : 'general';
+		$valid_types = array_keys( \AIFeedDigest\Core\Plugin::get_feed_types() );
+		if ( in_array( $feed_type, $valid_types, true ) ) {
+			Links::update_feed_meta( $link_id, '_afd_feed_type', $feed_type );
+		}
 	}
 
 	/**
@@ -201,5 +208,21 @@ class LinkMetaBox {
 
 		// Default to active if not set.
 		return '' === $value || (bool) $value;
+	}
+
+	/**
+	 * Get the feed type for a link.
+	 *
+	 * @param int $link_id The link ID.
+	 * @return string The feed type.
+	 */
+	public static function get_feed_type( int $link_id ): string {
+		$feed_type = Links::get_feed_meta( $link_id, '_afd_feed_type' );
+
+		if ( empty( $feed_type ) ) {
+			return \AIFeedDigest\Core\Plugin::FEED_TYPE_GENERAL;
+		}
+
+		return $feed_type;
 	}
 }

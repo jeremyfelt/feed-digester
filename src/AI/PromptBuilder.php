@@ -45,18 +45,25 @@ class PromptBuilder {
 		$this->feed  = $feed;
 		$this->items = $items;
 
-		// Check for per-feed prompt override.
+		// Check for per-feed custom prompt override (highest priority).
 		$custom_prompt = Links::get_feed_meta( $feed->link_id, '_afd_custom_prompt' );
 
 		if ( ! empty( $custom_prompt ) ) {
 			$this->template = $custom_prompt;
 		} else {
-			$this->template = get_option( 'afd_prompt_template', '' );
-		}
+			// Get the feed type and use its specific template.
+			$feed_type = Links::get_feed_meta( $feed->link_id, '_afd_feed_type' );
 
-		// Fall back to default if empty.
-		if ( empty( $this->template ) ) {
-			$this->template = \AIFeedDigest\Core\Plugin::get_default_prompt_template();
+			if ( ! empty( $feed_type ) && \AIFeedDigest\Core\Plugin::FEED_TYPE_GENERAL !== $feed_type ) {
+				// Use the feed type-specific template.
+				$this->template = \AIFeedDigest\Core\Plugin::get_prompt_template_for_type( $feed_type );
+			} else {
+				// For general type, check global prompt first, then fall back to default.
+				$global_prompt = get_option( 'afd_prompt_template', '' );
+				$this->template = ! empty( $global_prompt )
+					? $global_prompt
+					: \AIFeedDigest\Core\Plugin::get_default_prompt_template();
+			}
 		}
 	}
 

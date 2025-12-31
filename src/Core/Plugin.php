@@ -15,6 +15,13 @@ use AIFeedDigest\Admin;
 class Plugin {
 
 	/**
+	 * Feed type constants.
+	 */
+	public const FEED_TYPE_GENERAL = 'general';
+	public const FEED_TYPE_LINKBLOG = 'linkblog';
+	public const FEED_TYPE_MUSIC = 'music';
+
+	/**
 	 * Singleton instance.
 	 *
 	 * @var Plugin|null
@@ -166,6 +173,92 @@ Please create an engaging newsletter summary in HTML format suitable for email. 
 Write in a warm, conversational tone. Be concise but informative. Use HTML formatting (h2, h3, p, ul, li, a, strong, em) but keep it simple for email compatibility.
 
 Articles to summarize:
+{articles_markdown}';
+	}
+
+	/**
+	 * Get available feed types.
+	 *
+	 * @return array Array of feed type => label pairs.
+	 */
+	public static function get_feed_types(): array {
+		return array(
+			self::FEED_TYPE_GENERAL  => __( 'General (comprehensive digest)', 'ai-feed-digest' ),
+			self::FEED_TYPE_LINKBLOG => __( 'Link Blog (simple list of links)', 'ai-feed-digest' ),
+			self::FEED_TYPE_MUSIC    => __( 'Music Blog (tracks and artists)', 'ai-feed-digest' ),
+		);
+	}
+
+	/**
+	 * Get the prompt template for a specific feed type.
+	 *
+	 * @param string $feed_type The feed type.
+	 * @return string The prompt template.
+	 */
+	public static function get_prompt_template_for_type( string $feed_type ): string {
+		switch ( $feed_type ) {
+			case self::FEED_TYPE_LINKBLOG:
+				return self::get_linkblog_prompt_template();
+
+			case self::FEED_TYPE_MUSIC:
+				return self::get_music_prompt_template();
+
+			case self::FEED_TYPE_GENERAL:
+			default:
+				return self::get_default_prompt_template();
+		}
+	}
+
+	/**
+	 * Get the link blog prompt template.
+	 *
+	 * @return string
+	 */
+	public static function get_linkblog_prompt_template(): string {
+		return 'You are creating a simple digest of interesting links from "{feed_name}" for a reader who wants a quick list of what\'s been shared.
+
+This feed shared {article_count} links in the last {period}.
+
+Create a clean, scannable HTML list. Format:
+
+1. **Brief intro** (1 sentence): What kind of links were shared this {period}?
+
+2. **The Links**: A simple unordered list where each item has:
+   - The linked title
+   - One sentence describing what it is or why it\'s interesting
+
+Keep it minimal and scannable. No lengthy commentary needed - let the links speak for themselves. Use simple HTML (h2, p, ul, li, a, strong) suitable for email.
+
+Links to include:
+{articles_markdown}';
+	}
+
+	/**
+	 * Get the music blog prompt template.
+	 *
+	 * @return string
+	 */
+	public static function get_music_prompt_template(): string {
+		return 'You are creating a music digest from "{feed_name}" for a reader who wants to discover new music and stay current with what\'s being recommended.
+
+This feed featured {article_count} posts in the last {period}.
+
+Create an engaging HTML summary focused on the music. Include:
+
+1. **Overview** (2-3 sentences): What genres, moods, or themes dominated this {period}\'s selections?
+
+2. **Featured Tracks**: For each post, extract and highlight:
+   - **Artist - "Track Title"** (bold the artist and track names)
+   - Brief context: what the blogger said about it, the vibe, or why it was featured
+   - Link to the original post
+
+3. **Artists to Explore**: List any artists mentioned multiple times or given special attention.
+
+4. **Playlist Pick**: If you had to recommend just 3 tracks from this batch for a playlist, which would they be and why?
+
+Write with enthusiasm for the music. Use HTML formatting (h2, h3, p, ul, li, a, strong, em) suitable for email.
+
+Posts to summarize:
 {articles_markdown}';
 	}
 }
